@@ -31,6 +31,7 @@ in
       ./overlays/disable-wifi-overlay.nix
       #./overlays/set-cma-size-overlay.nix  # use boot.kernelParams (cmdline) instead
       ./restic-backups.nix
+      ./unstable-pkgs.nix
     ];
 
   /*
@@ -151,6 +152,8 @@ in
         RuntimeKeepFree=20M
       '';
     };
+    /*
+    # No need this with atuin
     variables = {
       HISTCONTROL = "erasedups:ignorespace";
       HISTSIZE = lib.mkDefault "-1";
@@ -159,6 +162,7 @@ in
       # Save each command in history as soon as it is executed
       PROMPT_COMMAND= "history -a;$PROMPT_COMMAND";
     };
+    */
   };
 
   /*
