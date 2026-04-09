@@ -129,12 +129,17 @@ in
       interfaces = [ interface ];
     };
     interfaces.eth0 = {
-      useDHCP = true;
-      #ipv4.addresses = [{
-      #  address = "192.168.1.100";
-      #  prefixLength = 24;
-      #}];
+      useDHCP = false;
+      ipv4.addresses = [{
+        address = "192.168.1.100";
+        prefixLength = 24;
+      }];
     };
+    defaultGateway = {
+      address = "192.168.1.1";
+      interface = "eth0";
+    };
+    nameservers = [ "1.1.1.1" ];
     firewall = {
       enable = true;
       allowedTCPPorts = [ 22 ];
@@ -201,6 +206,8 @@ in
     openFirewall = true;
   };
 
+  systemd.services.tailscaled.restartIfChanged = false;  # Disable restart on upgrade
+
   services.irqbalance.enable = true;
 
   users = {
@@ -233,6 +240,7 @@ in
   nix = {
     settings.auto-optimise-store = false;  # Avoiding some heavy IO
     settings.download-buffer-size = 134217728; # 128 MiB
+    settings.max-jobs = 2;
     gc.automatic = true;
     gc.dates = "weekly";
     gc.options = "--delete-older-than 14d";
